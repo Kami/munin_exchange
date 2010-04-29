@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% load assets %}
+{% block title %}Plugins{% endblock %}
+{% block feeds %}
+	<link rel="alternate" type="application/rss+xml" title="Latest plugins RSS feed" href="{% url plugins_feed %}" />
+{% endblock %}
+{% load breadcrumbs %}
+{% block breadcrumbs %}
+{% breadcrumb 'Plugins' %}
+{% endblock %}
+
+{% block content %}
+
+<h2>Plugins</h2>
+{% include "common/messages.html" %}
+
+{% include "plugins/index_partial.html" %}
+<div class="list_header">
+	<div class="left">
+		<p>Here you can see a list of all the available plugins.</p>
+	</div>
+	<div class="right content">
+		Sort by:
+		<select name="sort_field">
+		<option value="title" {% if sort_field == "title" %}selected="selected"{% endif %}>Title</option>
+		<option value="language" {% if sort_field == "language" %}selected="selected"{% endif %}>Language</option>
+		<option value="date_submitted" {% if sort_field == "pluginversion__date_submitted" or not sort_field %}selected="selected"{% endif %}>Date submitted</option>
+		</select>
+		
+		Direction:
+		<select name="sort_direction">
+		<option value="asc" {% if sort_direction == "asc" %}selected="selected"{% endif %}>ASC</option>
+		<option value="desc" {% if sort_direction == "desc" or not sort_field and not sort_direction %}selected="selected"{% endif %}>DESC</option>
+		</select>
+	</div>
+</div>
+
+<div id="pagination">
+	{% include "plugins/index_page.html" %}
+</div>
+
+{% endblock %}

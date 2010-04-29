@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% load assets %}
+{% block title %}Uploaded plugins{% endblock %}
+{% load breadcrumbs %}
+{% block breadcrumbs %}
+{% breadcrumb 'Plugins' %}
+{% breadcrumb 'Uploaded' %}
+{% endblock %}
+
+{% block content %}
+
+<h2>Uploaded plugins</h2>
+{% include "common/messages.html" %}
+
+{% include "plugins/uploaded_partial.html" %}
+<div class="list_header">
+	<div class="left">
+		<p>Here you can view and manage plugins which you have uploaded.</p>
+		<p>To prevent the miss-use of the versioning system and breaking plugin URLs, you are only allowed to change a small subset of fields.</p>
+	</div>
+</div>
+
+<div id="pagination">
+	{% include "plugins/uploaded_page.html" %}
+</div>
+
+{% endblock %}

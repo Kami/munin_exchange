@@ -1,0 +1,18 @@
+<VirtualHost *:8000>
+	ServerAdmin info@k5-storitve.net
+    ServerName exchange.munin-monitoring.org
+
+	# WSGI Settings
+    WSGIDaemonProcess muninexchange-production user=muninexchange group=muninexchange threads=25 python-path=/foo/domains/virtualenvs/lib/python2.6/site-packages
+    WSGIProcessGroup muninexchange-production
+
+    WSGIScriptAlias / /foo/domains/releases/current/munin_exchange/configs/production/production.wsgi
+    <Directory /foo/domains/releases/current/munin_exchange/configs/production>
+        Order deny,allow
+        Allow from all
+    </Directory>
+
+    # Log files
+	ErrorLog /foo/logs/error.log
+	CustomLog /foo/logs/access.log combined
+</VirtualHost>

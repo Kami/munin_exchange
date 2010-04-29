@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load rpx %}
+
+{% block title %}Associate a new login{% endblock %}
+{% load breadcrumbs %}
+{% block breadcrumbs %}
+{% breadcrumb 'Associate a new login' %}
+{% endblock %}
+
+{% block content %}
+
+<h2>Associate a new login</h2>
+{% include "common/messages.html" %}
+
+<div id="associated_logins">
+    <p>Here are the logins you have associated with your account.</p>
+
+    {% for rpxdata in rpxdatas %}
+    <dl>
+        <dt>{{ rpxdata.provider }}:</dt>
+        <dd>
+            <input type="text" class="user_identifier" value="{{ rpxdata.identifier }}" /> 
+            {# Logically, checking != is bad. Should be > 1. But we don't have that tag #}
+            {% ifnotequal rpxdatas|length 1 %}
+            <a href="{% url auth_delete_associated rpxdata.id %}" class="delete">(delete)</a>
+            {% endifnotequal %}
+        </dd>
+    </dl>
+    {% endfor %}
+</div>
+<div id="add_login">
+    <p>{% rpx_link "Click here to add <em>another</em> login to your account." extra rpx_response_path %}</p>
+</div>
+{% rpx_script extra rpx_response_path 'show_provider_list' %}
+{% endblock %}
+

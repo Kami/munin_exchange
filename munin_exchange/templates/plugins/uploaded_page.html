@@ -1,0 +1,54 @@
+<div class="plugin_list">
+	<table class="list">
+		<thead>
+		<tr>
+			<th>Title</th>
+			<th>Category</th>
+			<th>Platform(s)</th>
+			<th>Language</th>
+			<th>Date submitted</th>
+			<th>Status</th>
+			<th>Edit</th>
+		</tr>
+		</thead>
+		<tbody>
+		{% if plugins.object_list %}
+		{% for plugin in plugins.object_list %}
+			<tr>
+				<td style="width: 120px;" class="title"><a href="{% url plugins_details title_slug=plugin.title_slug %}" title="{{ plugin.description|truncatewords:20|striptags }}" class="title">{{ plugin.title }}</a></td>
+				<td><a href="{% url plugins_index %}?filter=category:{{ plugin.get_category }}">{{ plugin.get_category }}</a></td>
+				<td>
+					{% for platform in plugin.get_platforms %}
+						<a href="{% url plugins_index %}?filter=platform:{{ platform }}">{{ platform }}</a>{% if not forloop.last %},{% endif %}
+					{% endfor %}
+				</td>
+				<td><a href="{% url plugins_index %}?filter=language:{{ plugin.language }}">{{ plugin.language }}</a></td>
+				<td>{{ plugin.get_latest_version.date_submitted|date:"d.m.Y" }}</td>
+				<td>{% if plugin.approved %}<span style="color:green;">Approved</span>{% else %}<span style="color:black;">Pending approval</span>{% endif %}</td>
+				<td><a href="{% url plugins_edit_plugin title_slug=plugin.title_slug %}">edit</a></td>
+			</tr>
+		{% endfor %}
+		{% else %}
+			<tr>
+				<td colspan="7">You haven not uploaded any plugin yet.</p>
+			</tr>
+		{% endif %}
+		</tbody>
+	</table>
+	
+	<div class="pagination">
+	    <span class="step-links">
+	        {% if plugins.has_previous %}
+	            <a href="#p{{ plugins.previous_page_number }}">previous</a>
+	        {% endif %}
+	
+	        <span class="current">
+	            Page {{ plugins.number }} of {{ plugins.paginator.num_pages }}.
+	        </span>
+	
+	        {% if plugins.has_next %}
+	            <a href="#p{{ plugins.next_page_number }}">next</a>
+	        {% endif %}
+	    </span>
+	</div>
+</div>

@@ -1,0 +1,1 @@
+New plugin: {{ plugin_title }} {{ url }}

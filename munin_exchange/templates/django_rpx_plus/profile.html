@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Account profile{% endblock %}
+{% load breadcrumbs %}
+{% block breadcrumbs %}
+{% breadcrumb 'Account profile' %}
+{% endblock %}
+
+{% block content %}
+
+<h2>Account profile</h2>
+{% include "common/messages.html" %}
+
+<p>This is what people will see on your public profile page. You
+can also <a href="{% url auth_associate %}">manage your logins &raquo</a></p>
+
+<form action="" method="post" name="profile_form" id="profile_form">{% csrf_token %}
+    {% include "forms/fields.html" %}
+    <div class="actions">
+        <button type="submit" name="submit" value="Save">Update Profile &raquo;</button>
+    </div>
+</form>
+
+{% endblock %}

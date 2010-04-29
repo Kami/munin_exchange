@@ -1,0 +1,13 @@
+<html>
+<head>
+{% load assets %}
+{% assets "css_base" %}
+	<link rel="stylesheet" type="text/css" media="screen" href="{{ ASSET_URL }}" />
+{% endassets %}
+</head>
+<body style="background: #FFFFFF">
+	<div id="content">
+		<div class="description">{{ data|safe }}</div>
+	</div>
+</body>
+</html>

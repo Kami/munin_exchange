@@ -1,0 +1,13 @@
+{% if comment_count == 0 %}
+	<p>This plugin has no comments yet.</p>
+{% else %}
+{% load markup %}
+<div id="comment_list">
+  {% for comment in comment_list %}
+  	<div id="c{{ comment.id }}" class="comment"> 
+	   <div class="meta content">Written by <strong>{{ comment.name }}</strong> on <a href="{% url plugins_details title_slug=plugin.title_slug %}#c{{ comment.id }}">{{ comment.submit_date|date:"DATETIME_FORMAT" }}</a>.</div>
+	   <div class="body">{{ comment.comment|markdown }}</div>
+    </div>
+  {% endfor %}
+</div>
+{% endif %}

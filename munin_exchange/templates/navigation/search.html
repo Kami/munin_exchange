@@ -1,0 +1,17 @@
+<p>Find a plugin</p>
+
+<script type="text/javascript">
+$(window).load(function()
+{
+	$('#search_keyword').autocomplete('{% url plugins_search_lookup %}',
+	{
+		width: 120,
+		minChars: 2,
+		selectFirst: false
+	});
+});
+</script>
+<form method="GET" action="{% url plugins_search %}">
+	<input type="text" name="keyword" id="search_keyword" class="search" /><br />
+	<input type="submit" value="Search" />
+</form>

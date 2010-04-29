@@ -1,0 +1,7 @@
+<span class="info">
+{% if user.is_authenticated %}
+	You are currently logged in as <a href="{% url auth_profile %}">{{ user.username }}</a> | <a href="{% url plugins_uploaded_plugins %}">Uploaded plugins</a> | <a href="{% url auth_logout %}">Logout</a>
+{% else %}
+<a href="{% url auth_login %}">Login</a> | <a href="{% url auth_register %}">Register</a>
+{% endif %}
+</span>

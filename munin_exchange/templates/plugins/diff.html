@@ -1,0 +1,52 @@
+{% load assets %}
+{% assets "css_dv" %}
+	<link rel="stylesheet" type="text/css" media="screen" href="{{ ASSET_URL }}" />
+{% endassets %}
+{% assets "css_sh" %}
+	<link rel="stylesheet" type="text/css" media="screen" href="{{ ASSET_URL }}" />
+{% endassets %}
+<div class="diff_view">
+<table class="codehilitetable">
+  <tr>
+    {% with file1.submission as sub %}
+    <th colspan="2"><tt>Version {{ version1.version_number }}</tt> (submitted on {{ version1.date_submitted|date  }} by {{ version1.submitted_by }})</th>
+    {% endwith %}
+
+    {% with file2.submission as sub %}
+	<th colspan="2"><tt>Version {{ version2.version_number }}</tt> (submitted on {{ version2.date_submitted|date  }} by {{ version2.submitted_by }})</th>
+	{% endwith %}
+  </tr>
+
+  {% for snip in snippets %}
+  <tr>
+    {% ifequal snip.tag "equal" %}
+    <td class="linenos diff_equal"><div class="linenodiv"><pre>{{ snip.file1_linenums }}</pre></div></td>
+    <td class="code diff_equal"><div class="codehilite"><pre>{{ snip.file1_code|safe }}</pre></div></td>
+    <td class="linenos diff_equal"><div class="linenodiv"><pre>{{ snip.file2_linenums }}</pre></div></td>
+    <td class="code diff_equal"><div class="codehilite"><pre>{{ snip.file2_code|safe }}</pre></div></td>
+    {% endifequal %}
+
+    {% ifequal snip.tag "delete" %}
+    <td class="linenos diff_delete"><div class="linenodiv"><pre>{{ snip.file1_linenums }}</pre></div></td>
+    <td class="code diff_delete"><div class="codehilite"><pre>{{ snip.file1_code|safe }}</pre></div></td>
+    <td class="diff_blank"><div class="linenodiv"><pre>{{ snip.file2_linenums }}</pre></div></td>
+    <td class="diff_blank"><div class="codehilite"><pre>{{ snip.file2_code|safe }}</pre></div></td>
+    {% endifequal %}
+
+    {% ifequal snip.tag "insert" %}
+    <td class="diff_blank"><div class="linenodiv"><pre>{{ snip.file1_linenums }}</pre></div></td>
+    <td class="diff_blank"><div class="codehilite"><pre>{{ snip.file1_code|safe }}</pre></div></td>
+    <td class="linenos diff_insert"><div class="linenodiv"><pre>{{ snip.file2_linenums }}</pre></div></td>
+    <td class="code diff_insert"><div class="codehilite"><pre>{{ snip.file2_code|safe }}</pre></div></td>
+    {% endifequal %}
+
+    {% ifequal snip.tag "replace" %}
+    <td class="linenos diff_replace"><div class="linenodiv"><pre>{{ snip.file1_linenums }}</pre></div></td>
+    <td class="code diff_replace"><div class="codehilite"><pre>{{ snip.file1_code|safe }}</pre></div></td>
+    <td class="linenos diff_replace"><div class="linenodiv"><pre>{{ snip.file2_linenums }}</pre></div></td>
+    <td class="code diff_replace"><div class="codehilite"><pre>{{ snip.file2_code|safe }}</pre></div></td>
+    {% endifequal %}
+  </tr>
+  {% endfor %}
+</table>
+</div>

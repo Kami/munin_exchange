@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load rpx %}
+
+{% block title %}Login{% endblock %}
+{% load breadcrumbs %}
+{% block breadcrumbs %}
+{% breadcrumb 'LOGIN' %}
+{% endblock %}
+
+{% block content %}
+<h2>Login</h2>
+{% include "common/messages.html" %}
+
+<p>Here you can login using one of the available OpenID providers.</p>
+
+<div id="login_box">
+{% rpx_embed extra %}
+</div>
+
+{% endblock %}

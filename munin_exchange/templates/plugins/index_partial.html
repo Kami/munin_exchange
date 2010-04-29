@@ -1,0 +1,54 @@
+<script type="text/javascript">
+$(window).load(function()
+{
+	$('select[name=sort_field],select[name=sort_direction]').change(function()
+	{
+		applySorts()
+	});
+	
+	$('a.title').tipTip(
+	{
+			delay: 100
+	});
+
+	function applySorts()
+	{
+		var re = new RegExp(/(\?|&)sort=.*?:(desc|asc)/);
+		
+		var selectedField = $('select[name=sort_field]').val();
+		var selectedDirection = $('select[name=sort_direction]').val();
+
+		// Remove any existing filters
+		var queryString = window.location.search;
+		queryString = queryString.replace(re, "")
+		var url = (queryString == '' ? '?' : (queryString == '?' ? '' : queryString + '&'))
+		
+		url += 'sort=' + selectedField + ':' + selectedDirection;
+		window.location.href = url;
+	}
+
+	function reloadPage()
+	{
+		var hash = window.location.hash;
+		var queryString = window.location.search;
+
+		if (hash != '')
+		{
+			page = hash.substr(2);
+			if (page != '')
+			{
+				Dajaxice.plugins.pagination_index('Dajax.process', {'p': page, 'query_string': queryString});
+			}
+		}
+		else
+		{
+			Dajaxice.plugins.pagination_index('Dajax.process', {'p': 1, 'query_string': queryString});
+		}
+	}
+
+	$.History.bind(function(state)
+	{
+		reloadPage();
+	});
+});
+</script>

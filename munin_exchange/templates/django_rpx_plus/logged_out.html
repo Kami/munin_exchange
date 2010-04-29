@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Logout{% endblock %}
+
+{% load breadcrumbs %}
+{% block breadcrumbs %}
+{% breadcrumb 'Logout' %}
+{% endblock %}
+
+{% block header %}{% endblock %}
+
+{% block content %}
+<h2>Logout sucessfull</h2>
+
+<p>You have been successfully logged out.<br /><br />
+<a href="{% url auth_login %}">Click here to login again</a>
+</p>
+{% endblock %}

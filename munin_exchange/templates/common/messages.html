@@ -1,0 +1,16 @@
+{% if messages %}
+<script type="text/javascript">
+	$(document).ready(function()
+	{
+		{% for message in messages %}
+		$.notifyBar({
+		    html: "{{ message|safe }}",
+		    delay: 3000,
+		    animationSpeed: "normal",
+		    cls: "{{ message.tags }}",
+		    close: true
+		  });
+		{% endfor %}  
+	});
+</script>
+{% endif %}

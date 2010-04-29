@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Submit a plugin{% endblock %}
+
+{% load assets %}
+{% block stylesheets %}
+	{% assets "css_markitup" %}
+		<link rel="stylesheet" type="text/css" media="screen" href="{{ ASSET_URL }}" />
+	{% endassets %}
+{% endblock %}
+
+{% block javascript %}
+	{% assets "js_markitup" %}
+		<script src="{{ ASSET_URL }}" type="text/javascript" charset="utf-8"></script>
+	{% endassets %}
+{% endblock %}
+
+{% load breadcrumbs %}
+{% block breadcrumbs %}
+{% breadcrumb_url 'Plugins' plugins_index %}
+{% breadcrumb 'Submit' %}
+{% endblock %}
+
+{% block content %}
+<h2>Submit a plugin</h2>
+{% include "common/messages.html" %}
+{% include "common/form_errors.html" %}
+
+<p>Here you can submit a <strong>new</strong> plugin.</p>
+<p>If you want to submit an update or a modified version of a plugin which is already in the database,
+please visit the plugin details page and click on the "Submit a new version" link there.</p>
+<p>If you are not sure if a plugin for a same purpose already exists, use search on the left.</p>
+
+{% include "plugins/submit_partial.html" %}
+<form enctype="multipart/form-data" action="" method="post">{% csrf_token %}
+    {% include "forms/fields.html" %}
+    <div class="actions">
+        <button type="submit" name="submit" value="Save">Submit &raquo;</button>
+    </div>
+</form>
+{% endblock %}

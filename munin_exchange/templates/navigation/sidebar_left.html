@@ -1,0 +1,33 @@
+{% load navclass %}
+<ul class="null">
+	<li><a class="{% active request "^/$" %}" href="{% url index %}">HOME</a></li>
+	<li><a class="{% active request "^/plugins/(\?filter.*)?$" %}" href="{% url plugins_index %}">PLUGINS</a></li>
+	{% ifequal request.path "/plugins/" %}
+	<li>
+		<ul class="level_2">
+		<li><a class="{% active request "^/plugins/\?filter=category:Databases" %}" href="{% url plugins_index %}?filter=category:Databases">Databases</a></li>
+		<li><a class="{% active request "^/plugins/\?filter=category:Web servers" %}" href="{% url plugins_index %}?filter=category:Web servers">Web servers</a></li>
+		<li><a class="{% active request "^/plugins/\?filter=category:Game servers" %}" href="{% url plugins_index %}?filter=category:Game servers">Game servers</a></li>
+		<li><a class="{% active request "^/plugins/\?filter=category:System" %}" href="{% url plugins_index %}?filter=category:System">System</a></li>
+		<li><a class="{% active request "^/plugins/\?filter=category:Network" %}" href="{% url plugins_index %}?filter=category:Network">Network</a></li>
+		<li><a class="{% active request "^/plugins/\?filter=category:Services" %}" href="{% url plugins_index %}?filter=category:Services">Services</a></li>
+		<li><a class="{% active request "^/plugins/\?filter=category:UPS" %}" href="{% url plugins_index %}?filter=category:UPS">UPS</a></li>
+		<li><a class="{% active request "^/plugins/\?filter=category:Other$" %}" href="{% url plugins_index %}?filter=category:Other">Other</a></li>
+		</ul>
+	</li>
+	{% endifequal %}
+	<li><a class="{% active request "^/plugins/top$" %}" href="{% url plugins_top %}">TOP 10</a></li>
+	<li><a class="{% active request "^/plugins/statistics$" %}" href="{% url plugins_statistics %}">STATISTICS</a></li>
+	<li><a class="{% active request "^/plugins/submit$" %}" href="{%url plugins_submit_plugin %}">SUBMIT</a></li>
+	<li><a class="{% active request "^/about/$" %}" href="/about/">ABOUT</a></li>
+	<li><a class="{% active request "^/contact/$" %}" href="/contact/">CONTACT</a></li>
+</ul>
+
+<div id="search_box" class="content">
+	{% include "navigation/search.html" %} 
+</div>
+
+<div id="tag_cloud_box" class="content">
+<p class="title">Popular tags</p>
+	{% include "navigation/tag_cloud.html" %} 
+</div>

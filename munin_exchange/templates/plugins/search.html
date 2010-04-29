@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% load assets %}
+{% block title %}Plugins{% endblock %}
+{% block feeds %}
+	<link rel="alternate" type="application/rss+xml" title="Latest plugins RSS feed" href="{% url plugins_feed %}" />
+{% endblock %}
+{% load breadcrumbs %}
+{% block breadcrumbs %}
+{% breadcrumb_url 'Plugins' plugins_index %}
+{% breadcrumb 'Search' %}
+{% endblock %}
+
+{% block content %}
+
+<h2>Plugins</h2>
+{% include "common/messages.html" %}
+
+
+<p>Search results for keyword: "<strong>{{ keyword }}</strong>"</p>
+
+{% include "plugins/index_partial.html" %}
+<script type="text/javascript">
+$(window).load(function()
+{
+	$('table.list td.title').highlight('{{ keyword }}');
+});
+</script>
+<div id="pagination">
+	{% include "plugins/index_page.html" %}
+</div>
+
+{% endblock %}

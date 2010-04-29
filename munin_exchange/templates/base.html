@@ -1,0 +1,82 @@
+{% load assets %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" xmlns:og="http://opengraphprotocol.org/schema/"
+      xmlns:fb="http://www.facebook.com/2008/fbml">
+<head>
+<title>Munin Exchange | {% block title %}{% endblock %}</title>
+{% block meta %}
+{% endblock %}
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="description" content="Munin plugin repository" />
+<meta name="keywords" content="munin, plugins, munin exchange, plugin repository" />
+<meta name="google-site-verification" content="erTPdq7pJ8eLhhj0EHOWjdF1Fr3LnocWU0Vs5kaEzf4" />
+<meta name="msvalidate.01" content="F0E26399F912654A60F524395081E0DE" />
+<link rel="shortcut icon" href="{{ MEDIA_URL }}/images/favicon.ico"> 
+{% assets "css_base" %}
+	<link rel="stylesheet" type="text/css" media="screen" href="{{ ASSET_URL }}" />
+{% endassets %}
+{% block stylesheets %}
+{% endblock %}
+{% block feeds %}
+{% endblock %}
+
+{% load dajaxice_templatetags %}
+{% dajaxice_js_import %}
+
+ <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+{% assets "js_core" %}
+	<script src="{{ ASSET_URL }}" type="text/javascript" charset="utf-8"></script>
+{% endassets %}
+
+{% block javascript %}
+{% endblock %}
+</head>
+
+<body>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-1107810-15']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+  	$(window).load(function()
+	{
+		$('a.tooltip').tipTip(
+		{
+				delay: 100
+		});
+	});
+</script>
+<div id="wrap">
+	{% include "header.html" %}
+<div id="nav">
+	<div class="menu">
+	{% include "navigation/sidebar_left.html" %}
+	</div>
+</div>
+
+<div id="main">
+	<div class="subnav">
+		{% include "navigation/subnav.html" %}
+		{% include "navigation/breadcrumbs.html" %}
+	</div>
+	
+	<div id="content">
+	{% block content %}
+	{% endblock %}
+	</div>
+
+	<div class="clear50">&nbsp;</div>
+	<div class="footer">
+		{% include "footer.html" %}
+	</div>
+</div>
+</div>
+
+</body>
+</html>

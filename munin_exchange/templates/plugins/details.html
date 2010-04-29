@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% block title %}{{ plugin.title }} plugin{% endblock %}
+{% block meta %}
+	<meta property="og:site_name" content="Munin Exchange"/>
+	<meta property="og:description" content="Munin Plugin repository" />
+	<meta property="og:title" content="{{ plugin.title }} plugin"/>
+	<meta property="og:url" content="{{ plugin.get_full_url }}"/>
+	<meta property="og:image" content="{{ MEDIA_URL }}"/>
+{% endblock %}
+{% block feeds %}
+	<link rel="alternate" type="application/rss+xml" title="Latest plugin versions RSS feed" href="{% url plugins_versions_feed plugin.title_slug %}" />
+{% endblock %}
+{% block javascript %}
+	<script type="text/javascript" src="http://cdn.topsy.com/topsy.js?init=topsyWidgetCreator"></script>
+{% endblock %}
+{% load breadcrumbs %}
+{% block breadcrumbs %}
+{% breadcrumb_url 'Plugins' plugins_index %}
+{% breadcrumb plugin.title %}
+{% endblock %}
+
+{% block content %}
+<h2>{{ plugin.title }} plugin <a href="{% url plugins_versions_feed plugin.title_slug %}" id="rss" title="Be notified when a new version is uploaded">&nbsp;</a></h2>
+{% include "common/messages.html" %}
+
+<script type="text/javascript">
+$(window).load(function()
+{
+	$('a[title]').tipTip(
+	{
+		delay: 100
+	});
+});
+</script>
+<div class="clearfix">
+	<div id="information">
+		<h3>Information:</h3>
+		<p>
+		<span class="label">Category</span>: {{ plugin.get_category }}<br />
+		<span class="label">Platform(s)</span>:
+		{% for platform in plugin.get_platforms %}
+			<a href="{% url plugins_index %}?filter=platform:{{ platform }}">{{ platform }}</a>{% if not forloop.last %},{% endif %}
+		{% endfor %}<br />
+		<span class="label">Tags</span>:
+		{% if plugin.get_tags %}
+			{% for tag in plugin.get_tags %}
+				<a href="{% url plugins_index %}?filter=tag:{{ tag }}">{{ tag }}</a>{% if not forloop.last %},{% endif %}
+			{% endfor %}
+		{% else %}
+			none
+		{% endif %}
+		<br />
+		<span class="label">Language</span>: <a href="{% url plugins_index %}?filter=language:{{ plugin.language }}">{{ plugin.language }}</a><br />
+		<span class="label">Author</span>: {{ plugin.get_latest_version.author }}<br />
+		<span class="label">Uploaded by</span>: {{ plugin.get_latest_version.submitted_by }}<br />
+		<span class="label">Date uploaded</span>: {{ plugin.get_latest_version.date_submitted|date:"d.m.Y" }}<br />
+		<span class="label">Downloads</span>: <span id="downloads_value">{{ plugin.downloads }}</span><br />
+		<span class="label">Rating</span>: <span id="rate_result">{{ plugin.rating.get_rating }} ({{ plugin.rating.get_ratings.count }} votes total)</span><br />
+		{% if relatives %}
+		<span class="label">Relatives</span>: 
+		{% for plugin in relatives %}
+			<a href="{% url plugins_details plugin.title_slug %}">{{ plugin.title }}</a> ({{ plugin.get_platforms|join:"," }}){% if not forloop.last %},{% endif %}
+		{% endfor %}
+		{% endif %}
+		
+		<!-- AddThis Button BEGIN -->
+		<div class="addthis_toolbox addthis_default_style content">
+		<a class="addthis_button_twitter"></a>
+		<a class="addthis_button_facebook"></a>
+		<a class="addthis_button_digg"></a>
+		<a class="addthis_button_googlebuzz"></a>
+		<a class="addthis_button_diigo"></a>
+		<span class="addthis_separator">|</span>
+		<a href="http://addthis.com/bookmark.php?v=250&amp;username=kamislo" class="addthis_button_expanded">More</a>
+		</div>
+		<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#username=kamislo"></script>
+		<!-- AddThis Button END -->
+		</p>
+	</div>
+	
+	<div id="screenshot">
+	{% if plugin.screenshot %}
+		<a href="{{ plugin.screenshot.url }}"><img src="{{ plugin.screenshot.url_430x245 }}" /></a>
+	{% endif %}
+	</div>
+</div>
+
+<h3>Actions</h3>
+<p><a href="{% url plugins_download title_slug=plugin.title_slug,version_number=plugin.get_latest_version.version_number %}" class="download">Download</a> | <a href="{% url plugins_version title_slug=plugin.title_slug version_number=plugin.get_latest_version.version_number %}"">View source</a> | <a href="{% url plugins_versions title_slug=plugin.title_slug %}">Versions ({{ plugin.pluginversion_set.count }})</a> | <a href="{% url plugins_relatives plugin.title_slug %}" title="Relatives are plugins which have the same name and output but are available for different platform"> Relatives ({{ relatives.count }})</a> | <a href="{% url plugins_submit_version title_slug=plugin.title_slug %}" title="Click here if you want to submit a new version of this plugin">Submit a new version</a></p>
+
+<h3>Description</h3>
+<div class="description">{{ plugin.description }}</div>
+
+<script type="text/javascript">
+$(window).load(function()
+{
+	$('#rating :radio.rate-star').rating({
+		focus: function(value, link)
+		{
+			var tip = $('#rate_tip');
+			tip[0].data = tip[0].data || tip.html();
+			tip.html(link.title || 'value: ' + value);
+			tip.attr('class', '');
+		},
+		blur: function(value, link)
+		{
+			var tip = $('#rate_tip');
+			$('#rate_tip').html(tip[0].data || '');
+		},
+		callback: function(value, link)
+		{
+			if (value != undefined)
+			{
+				Dajaxice.plugins.rating('Dajax.process', {'plugin_id': {{ plugin.id }}, 'score': value})
+			}
+		}
+	}); 
+
+	$('a.download').click(function()
+	{
+		window.setTimeout(function()
+		{
+			Dajaxice.plugins.get_download_count('Dajax.process', {'plugin_id': {{ plugin.id }}});
+		}, 500);
+	});
+});
+</script>
+
+<h3>Rate it</h3>
+<div id="rating">
+<form id="rating">
+	<input name="star1" type="radio" class="rate-star" value="1" title="Very poor" {% if plugin.rating.get_rating >= 0 and plugin.rating.get_rating <= 1 %}checked="checked"{% endif %} />
+	<input name="star1" type="radio" class="rate-star" value="2" title="Poor" {% if plugin.rating.get_rating > 1 and plugin.rating.get_rating <= 2 %}checked="checked"{% endif %}/>
+	<input name="star1" type="radio" class="rate-star" value="3" title="OK" {% if plugin.rating.get_rating > 2 and plugin.rating.get_rating <= 3 %}checked="checked"{% endif %} />
+	<input name="star1" type="radio" class="rate-star" value="4" title="Good" {% if plugin.rating.get_rating > 3 and plugin.rating.get_rating <= 4 %}checked="checked"{% endif %}/>
+	<input name="star1" type="radio" class="rate-star" value="5" title="Excelent" {% if plugin.rating.get_rating > 4 and plugin.rating.get_rating <= 5 %}checked="checked"{% endif %} />
+	<span id="rate_tip">Select a rating</span><br /><br />
+</form>
+</div>
+
+{% load comments %}
+{% get_comment_count for plugin as comment_count %}
+
+<h3>Comments ({{ comment_count }})</h3>
+<div id="comments">
+	{% render_comment_list for plugin %}
+</div>
+
+<h3>Post a comment</h3>
+<div id="post_comment" style="display: none1">
+	{% if user.is_authenticated %}
+		{% render_comment_form for plugin %}
+	{% else %}
+		<p>You need to be <a href="{% url auth_register %}">registered</a> user to be able to post a comment.</p>
+	{% endif %}
+</div>
+{% endblock %}

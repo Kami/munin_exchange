@@ -1,0 +1,2 @@
+#!/bin/sh
+python ./munin_exchange/configs/${DEPLOYMENT_TARGET:="common"}/manage.py $*

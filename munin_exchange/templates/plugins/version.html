@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% load assets %}
+{% block stylesheets %}
+	{% assets "css_sh" %}
+		<link rel="stylesheet" type="text/css" media="screen" href="{{ ASSET_URL }}" />
+	{% endassets %}
+{% endblock %}
+
+{% block title %}Plugin {{ version.plugin.title }} version {{ version.version_number }}{% endblock %}
+{% block feeds %}
+	<link rel="alternate" type="application/rss+xml" title="Latest plugin versions RSS feed" href="{% url plugins_versions_feed version.plugin.title_slug %}" />
+{% endblock %}
+
+
+{% load breadcrumbs %}
+{% load setvar %}
+
+{% block breadcrumbs %}
+
+{% setvar breadcrumb_title %}
+Version {{ version.version_number }}
+{% endsetvar %}
+
+{% breadcrumb_url 'Plugins' plugins_index %}
+{% breadcrumb_url version.plugin.title plugins_details version.plugin.title_slug %}
+{% breadcrumb_url 'Versions' plugins_versions version.plugin.title_slug %}
+{% breadcrumb breadcrumb_title %}
+{% endblock %}
+
+{% block content %}
+
+<h2>Plugin {{ version.plugin.title }} version {{ version.version_number }}</h2>
+{% include "common/messages.html" %}
+
+{% load clippy %}
+
+<p>
+<span class="label">Language</span>: {{ version.plugin.language }}<br />
+<span class="label">Author</span>: {{ version.author }}<br />
+<span class="label">Date submitted</span>: {{ version.date_submitted|date:"d.m.Y" }}<br />
+
+{% if source_code %}
+	<span class="label">Copy to the clipboard</span>: {% clippy "source_code_raw" %}<br />
+	<span class="label">Actions</span>: <a href="{% url plugins_raw title_slug=version.plugin.title_slug,version_number=version.version_number %}" target="_blank">View raw</a> | <a href="{% url plugins_download title_slug=version.plugin.title_slug,version_number=version.version_number %}">Download</a><br />
+{% endif %}
+</p>
+
+{% if source_code %}
+	<script type="text/javascript">
+	$(window).load(function()
+	{
+		$('.codehilite pre').bind('mouseenter', function()
+		{
+			$(this).animate(
+			{
+				width: "1200px"
+			}, 300);
+		});
+
+		$('.codehilite pre').bind('mouseleave', function()
+		{
+			$(this).animate(
+			{
+				width: "750px"
+			}, 300);
+		});
+	});
+	</script>
+	{{ source_code|safe }}
+	<div id="source_code_raw" style="display: none;">{{ source_code_raw }}</div>
+{% else %}
+	<p>This file is probably an archive, so the source code cannot be displayed directly.</p>
+{% endif %}
+<p class="download"><a href="{% url plugins_download title_slug=version.plugin.title_slug,version_number=version.version_number %}">Download</a> ({{ version.file.size|filesizeformat }})</p>
+
+<p><a href="{% url plugins_versions title_slug=version.plugin.title_slug %}"><< Back to plugin versions list</a></p>
+
+{% endblock %}

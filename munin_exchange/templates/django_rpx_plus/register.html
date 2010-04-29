@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}First time user - Register{% endblock %}
+
+{% load breadcrumbs %}
+{% block breadcrumbs %}
+{% breadcrumb 'Register' %}
+{% endblock %}
+{% block content %}
+
+<h2>Register</h2>
+
+{% if messages %}ddd
+<div id="messages">
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+<p class="main">
+    This is the first time you have logged into our site with this account.
+    Please choose a username that you'd like to use and provide your email
+    address.
+</p>
+
+<form action="" method="post" name="profile_form" id="profile_form">{% csrf_token %}
+    {{ form.as_p }}
+    <div class="actions">
+        <input type="submit" name="submit" value="Save &raquo;" />
+    </div>
+</form>
+
+<p class="main">
+    Or, <a href="{% url auth_associate %}">associate this account with an existing username</a>.
+    <small>(Note: You must sign in with your existing account first.)</small>
+</p>
+{% endblock %}

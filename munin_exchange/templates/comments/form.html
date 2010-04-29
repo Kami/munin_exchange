@@ -1,0 +1,9 @@
+{% load comments i18n %}
+<form action="{% url plugins_comments_post %}" method="post">{% csrf_token %}
+	{% if next %}<input type="hidden" name="next" value="{{ next }}" />{% endif %}
+	{% include "comments/form_fields.html" %}
+	<p class="submit">
+	    <input type="submit" name="post" class="submit-post" value="{% trans "Post" %}" />
+	    <input type="submit" name="preview" class="submit-preview" value="{% trans "Preview" %}" />
+	</p>
+</form>

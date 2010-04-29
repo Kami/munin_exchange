@@ -1,0 +1,24 @@
+<VirtualHost *:8000>
+   ServerName exchange.munin-monitoring.org
+
+    <Location /> # until launch
+          Order Deny,Allow
+          Allow from all
+    </Location>
+
+    Redirect permanent /favicon.ico /foo/domains/releases/current/munin_exchange/favicon.ico
+
+    Alias /robots.txt /foo/domains/releases/current/munin_exchange/assets/robots.txt
+
+     # Log files
+	ErrorLog /foo/logs/error.log
+	CustomLog /foo/logs/access.log combined
+
+    ServerSignature Off
+
+    RewriteEngine on
+    DocumentRoot /foo/domains/releases/current/munin_exchange/assets/
+
+    RewriteCond %{REQUEST_URI} !/maintenance.html$
+    RewriteRule $ /maintenance.html [R=302,L]
+</VirtualHost>

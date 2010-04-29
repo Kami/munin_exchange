@@ -1,0 +1,28 @@
+<script type="text/javascript">
+$(window).load(function()
+{
+	function reloadPage()
+	{
+		var hash = window.location.hash;
+		var queryString = window.location.search;
+
+		if (hash != '')
+		{
+			page = hash.substr(2);
+			if (page != '')
+			{
+				Dajaxice.plugins.pagination_uploaded('Dajax.process', {'p': page, 'query_string': queryString});
+			}
+		}
+		else
+		{
+			Dajaxice.plugins.pagination_uploaded('Dajax.process', {'p': 1, 'query_string': queryString});
+		}
+	}
+
+	$.History.bind(function(state)
+	{
+		reloadPage();
+	});
+});
+</script>

@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% load assets %}
+{% block title %}{{ plugin.title }} plugin relatives{% endblock %}
+{% block feeds %}
+	<link rel="alternate" type="application/rss+xml" title="Latest plugins RSS feed" href="{% url plugins_feed %}" />
+{% endblock %}
+{% load breadcrumbs %}
+{% block breadcrumbs %}
+{% breadcrumb_url plugin.title plugins_details plugin.title_slug %}
+{% breadcrumb 'Relatives' %}
+{% endblock %}
+
+{% block content %}
+
+<h2>{{ plugin.title }} plugin relatives</h2>
+{% include "common/messages.html" %}
+
+<p>Here you can see {{ plugin.title }} plugin relatives (plugins which the same purpose and output but available on different platform).</p>
+
+<script type="text/javascript">
+$(window).load(function()
+{
+	$('.title').tipTip(
+	{
+		delay: 100
+	});
+});
+</script>
+
+<table class="list">
+	<thead>
+	<tr>
+		<th>Title</th>
+		<th>Category</th>
+		<th>Platform(s)</th>
+		<th>Language</th>
+		<th>Date submited</th>
+		<th>Latest version</th>
+		<th>Download</th>
+	</tr>
+	</thead>
+	<tbody>
+	{% if relatives %}
+	{% for plugin in relatives %}
+		<tr>
+			<td style="width: 120px;"><a href="{% url plugins_details title_slug=plugin.title_slug %}" title="{{ plugin.description|truncatewords:20 }}" class="title">{{ plugin.title }}</a></td>
+			<td><a href="{% url plugins_index %}?filter=category&value={{ plugin.get_category }}">{{ plugin.get_category }}</a></td>
+			<td>
+				{% for platform in plugin.get_platforms %}
+					<a href="{% url plugins_index %}?filter=platform&value={{ platform }}">{{ platform }}</a>{% if not forloop.last %},{% endif %}
+				{% endfor %}
+			</td>
+			<td>{{ plugin.language }}</td>
+			<td>{{ plugin.get_latest_version.date_submitted|date:"d.m.Y" }}</td>
+			<td><a href="{% url plugins_versions title_slug=plugin.title_slug %}">{{ plugin.get_latest_version.version_number }}</a></td>
+			<td><a href="{% url plugins_download title_slug=plugin.title_slug,version_number=plugin.get_latest_version.version_number %}">download</a></td>
+		</tr>
+	{% endfor %}
+	{% else %}
+		<tr>
+			<td colspan="7">This plugin has no relatives.</p>
+		</tr>
+	{% endif %}
+	</tbody>
+</table>
+
+<p><a href="{% url plugins_details title_slug=plugin.title_slug %}"><< Back to plugin description</a></p>
+{% endblock %}

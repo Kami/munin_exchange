@@ -1,0 +1,50 @@
+<script type="text/javascript">
+$(window).load(function()
+{
+	$('a[title]').tipTip(
+	{
+		delay: 100
+	});
+		
+	$('input[name=platform]').click(function()				
+	{
+		var platform_independent_checked = $('input[value={{ platform_independent_id }}]:checked').length;
+		var value = $(this).val();
+		var checked = this.checked;
+
+		if (value == {{ platform_independent_id }})
+		{
+			$('input[name=platform]').each(function()
+			{
+				var parent = $(this).parent().parent();
+				var value = $(this).val();
+				
+				if (value != {{ platform_independent_id }})
+				{
+					if (checked == true)
+					{
+						parent.hide('slow');
+						this.checked = false;
+					}
+					else
+					{
+						parent.show('slow');
+					}
+				}
+			});
+		}
+		else if (platform_independent_checked.length == 1 && value != {{ platform_independent_id }})
+		{
+			return false;
+		}
+	});
+
+	$('#id_description').markItUp(mySettings);
+	$("#id_tags").tagEditor(
+	{
+	    confirmRemoval: false,
+	    completeOnSeparator: true,
+	    continuousOutputBuild: true
+	});
+});
+</script>

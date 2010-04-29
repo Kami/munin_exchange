@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Submit a new plugin version{% endblock %}
+{% load breadcrumbs %}
+{% block breadcrumbs %}
+{% breadcrumb_url 'Plugins' plugins_index %}
+{% breadcrumb_url plugin.title plugins_details plugin.title_slug %}
+{% breadcrumb 'Submit new version' %}
+{% endblock %}
+{% block content %}
+<h2>Submit a new plugin version</h2>
+{% include "common/messages.html" %}
+
+<p>Here you can submit a new version for plugin "<strong>{{ plugin.title }}</strong>" (for example, if you made modifications or improvements to the original version).</p>
+
+<form enctype="multipart/form-data" action="" method="post">{% csrf_token %}
+    {% include "forms/fields.html" %}
+    <div class="actions">
+        <button type="submit" name="submit" value="Save">Submit &raquo;</button>
+    </div>
+</form>
+{% endblock %}

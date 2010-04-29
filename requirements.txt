@@ -1,0 +1,31 @@
+django
+django-extensions
+-e git://github.com/mikexstudios/django-rpx-plus.git#egg=django-rpx-plus
+-e git://github.com/bkjones/django-taxonomy.git#egg=django-taxonomy
+django-debug-toolbar
+-e git://github.com/jbalogh/django-debug-cache-panel.git#egg=django-debug-cache-panel
+
+-e git://github.com/Kami/django-assets.git#egg=django-assets
+-e svn+http://django-grappelli.googlecode.com/svn/trunk#egg=grappelli
+-e git://github.com/jorgebastida/django-dajaxice.git#egg=django-dajaxice
+-e git://github.com/jorgebastida/django-dajax.git#egg=django-dajax
+-e hg+https://python-twitter.googlecode.com/hg/#egg=python-twitter
+-e git://github.com/sebleier/django-redis-cache.git#egg=django-redis-cache
+-e git://github.com/mdornseif/django-clippy.git#egg=django-clippy
+-e git://github.com/dcramer/django-ratings.git#egg=django-ratings
+-e git://github.com/Kami/django-notifications.git#egg=django-notifications
+-e hg+http://bitbucket.org/jmoiron/johnny-cache#egg=johnny-cache
+
+pil
+simplejson
+pygments
+markdown
+django-markupfield
+django-autoslug
+django-ratings
+django-piston
+celery
+-e git://github.com/Kami/redis-py.git#egg=redis
+ghettoq
+oauth2
+oauth

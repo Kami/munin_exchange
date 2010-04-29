@@ -1,0 +1,27 @@
+{% for field in form %}
+	{% if field.is_hidden %}
+		{{ field }}
+	{% else %}
+		<div class="form_field" {% ifequal field.name "honeypot" %} style="display:none;"{% endifequal %}>
+		<span class="field_label">{{ field.label_tag }}</span>
+		{% if field.name == "name" %}
+			<input type="text" name="name" id="id_name" value="{{ request.user.username }}" readonly="readonly" />
+		{% else %}
+    		{% if field.name == "email" %}
+    			<input type="text" name="email" id="id_email" value="{{ request.user.email }}" readonly="readonly" />
+    		{% else %}
+				{{ field }}
+			{% endif %}
+		{% endif %}
+		{% if field.errors %}
+		<span class="errors">
+		{% for error in field.errors %}
+			{{ error }}
+		{% endfor %}
+		</span>
+		{% endif %}
+		<br />
+		{% if field.help_text %}<span class="help_text">{{ field.help_text|safe }}</span>{% endif %}
+		</div>
+	{% endif %}
+{% endfor %}

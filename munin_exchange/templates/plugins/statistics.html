@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Plugin statistics{% endblock %}
+{% load assets %}
+{% block javascript %}
+	{% assets "js_graphael" %}
+		<script src="{{ ASSET_URL }}" type="text/javascript" charset="utf-8"></script>
+	{% endassets %}
+{% endblock %}
+
+{% load breadcrumbs %}
+{% block breadcrumbs %}
+{% breadcrumb_url 'Plugins' plugins_index %}
+{% breadcrumb 'Plugin statistics' %}
+{% endblock %}
+
+{% block content %}
+
+<h2>Plugin statistics</h2>
+{% include "common/messages.html" %}
+
+<p>Here you can see plugin statistics.</p>
+
+{% load cache %}
+{% cache 1800 plugin_statistics %}
+<script type="text/javascript">
+$(window).load(function()
+{
+	var title_font = {"font-size": 14, "font-weight": "bold", "font-family": "lucida sans", "fill": "#666666"}
+	var placeholder_1 = Raphael("charts"),
+	hin = function() {
+		this.sector.stop();
+		this.sector.scale(1.1, 1.1, this.cx, this.cy);
+		if (this.label) {
+		      this.label[0].stop();
+		      this.label[0].scale(1.5);
+		      this.label[1].attr({"font-weight": 800});
+		}
+	},
+	hout = function() {
+		this.sector.animate({scale: [1, 1, this.cx, this.cy]}, 500, "bounce");
+        if (this.label) {
+            this.label[0].animate({scale: 1}, 500, "bounce");
+            this.label[1].attr({"font-weight": 400});
+        }
+    },
+	fin = function () {
+        this.flag = placeholder_1.g.popup(this.bar.x, this.bar.y, this.bar.value || "0").insertBefore(this);
+    },
+    fout = function () {
+        this.flag.animate({opacity: 0}, 300, function () {this.remove();});
+    };
+
+	placeholder_1.g.text(140, 10, "Plugins by platform").attr(title_font);
+	placeholder_1.g.text(570, 10, "Plugins by category").attr(title_font);
+	placeholder_1.g.text(140, 330, "Plugins by programming language").attr(title_font);
+	placeholder_1.g.text(590, 330, "Plugin submissions by month").attr(title_font);
+	
+    placeholder_1.g.piechart(560, 160, 110, [{% for category in plugins_by_category %} {{ category.count }}{% if not forloop.last %},{% endif %} {% endfor %}], {legend: [{% for category in plugins_by_category %} "{{ category.term__term }} ({{ category.count }})"{% if not forloop.last %},{% endif %} {% endfor %}], legendpos: "east", href: [{% for category in plugins_by_category_sorted %} "{% url plugins_index %}?filter=category:{{ category.term__term }}"{% if not forloop.last %},{% endif %} {% endfor %}]}).hover(hin, hout);
+    placeholder_1.g.piechart(130, 160, 110, [{% for platform in plugins_by_platform %} {{ platform.count }}{% if not forloop.last %},{% endif %} {% endfor %}], {legend: [{% for platform in plugins_by_platform %} "{{ platform.term__term }} ({{ platform.count }})"{% if not forloop.last %},{% endif %} {% endfor %}], legendpos: "east", href: [{% for platform in plugins_by_platform_sorted %} "{% url plugins_index %}?filter=platform:{{ platform.term__term }}"{% if not forloop.last %},{% endif %} {% endfor %}]}).hover(hin, hout);
+    placeholder_1.g.piechart(130, 480, 110, [{% for language in plugins_by_language %} {{ language.count }}{% if not forloop.last %},{% endif %} {% endfor %}], {legend: [{% for language in plugins_by_language %} "{{ language.language }} ({{ language.count }})"{% if not forloop.last %},{% endif %} {% endfor %}], legendpos: "east", href: [{% for language in plugins_by_language_sorted %} "{% url plugins_index %}?filter=language:{{ language.language }}"{% if not forloop.last %},{% endif %} {% endfor %}]}).hover(hin, hout);
+
+   placeholder_1.g.barchart(400, 380, 400, 180, [{% for month in submissions_by_month %} {{ month.count }}{% if not forloop.last %},{% endif %} {% endfor %}]).label([{% for month in submissions_by_month %} "{{ month.date }}"{% if not forloop.last %},{% endif %} {% endfor %}], true).hover(fin, fout);
+});
+</script>
+<div id="charts" style="height: 600px;"></div>
+{% endcache %}
+
+{% endblock %}

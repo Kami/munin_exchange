@@ -1,0 +1,11 @@
+<div>
+	{% if version.notes %}
+		{{ version.notes }}
+	{% else %}
+		{% if version.version_number == 1 %}
+			Initial release (check plugin description).
+		{% else %}
+			This plugin version has no notes.
+		{% endif %}
+	{% endif %}
+</div>

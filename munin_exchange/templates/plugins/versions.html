@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}Versions for plugin {{ plugin.title }}{% endblock %}
+{% block feeds %}
+	<link rel="alternate" type="application/rss+xml" title="Latest plugin versions RSS feed" href="{% url plugins_versions_feed plugin.title_slug %}" />
+{% endblock %}
+
+{% load breadcrumbs %}
+{% block breadcrumbs %}
+{% breadcrumb_url 'Plugins' plugins_index %}
+{% breadcrumb_url plugin.title plugins_details plugin.title_slug %}
+{% breadcrumb 'Versions' %}
+{% endblock %}
+
+{% block content %}
+
+<h2>Versions for plugin {{ plugin.title }} <a href="{% url plugins_versions_feed plugin.title_slug %}" id="rss" title="Be notified when a new version is uploaded">&nbsp;</a></h2>
+{% include "common/messages.html" %}
+
+<p>Here you can see a list of all the available versions for this plugin in reverse chronological order.</p>
+
+<script type="text/javascript">
+$(window).load(function()
+{
+	$('a[title]').tipTip(
+	{
+		delay: 100
+	});
+	
+	$('a[rel*=notes]').live('click', function()
+	{
+		var version = $('td.number').html();
+		Boxy.load($(this).attr('href'), { title: 'Notes: version ' + version, draggable: true});
+		return false;
+	});
+});
+</script>
+<table class="list">
+	<thead>
+	<tr>
+		<th>Version number</th>
+		<th>Author</th>
+		<th>Uploaded by</th>
+		<th>Date submitted</th>
+		<th>Notes</th>
+		<th>Source</th>
+		<th>Download</th>
+	</tr>
+	</thead>
+	<tbody>
+	{% for version in plugin.pluginversion_set.all %}
+		<tr>
+			<td style="width: 130px;" class="number">{{ version.version_number }}</td>
+			<td>{{ version.author }}</td>
+			<td>{{ version.submitted_by }}</td>
+			<td>{{ version.date_submitted|date:"d.m.Y" }}</td>
+			<td><a href="{% url plugins_version_notes version.plugin.title_slug version.version_number %}" rel="notes">view</a></td>
+			<td><a href="{% url plugins_version title_slug=plugin.title_slug version_number=version.version_number %}">view</a></td>
+			<td><a href="{% url plugins_download title_slug=plugin.title_slug,version_number=version.version_number %}">download</a></td>
+		</tr>
+	{% endfor %}
+	</tbody>
+</table>
+
+<p><a href="{% url plugins_details title_slug=plugin.title_slug %}"><< Back to plugin description</a></p>
+
+{% endblock %}

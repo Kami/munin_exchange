@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% load assets %}
+{% block title %}Top plugins{% endblock %}
+{% block feeds %}
+	<link rel="alternate" type="application/rss+xml" title="Latest plugins RSS feed" href="{% url plugins_feed %}" />
+{% endblock %}
+{% load breadcrumbs %}
+{% block breadcrumbs %}
+{% breadcrumb_url 'Plugins' plugins_index %}
+{% breadcrumb 'Top plugins' %}
+{% endblock %}
+
+{% block content %}
+
+<h2>Top plugins</h2>
+{% include "common/messages.html" %}
+
+<p>Here you can see a list of the most popular and best rated plugins.</p>
+
+<script type="text/javascript">
+$(window).load(function()
+{
+	$('.title').tipTip(
+	{
+		delay: 100
+	});
+});
+</script>
+
+{% load cache %}
+{% cache 1800 top_plugins %}
+<h3>Top rated</h3>
+<table class="list">
+	<thead>
+	<tr>
+		<th>Title</th>
+		<th>Category</th>
+		<th>Platform(s)</th>
+		<th>Language</th>
+		<th>Latest version</th>
+		<th>Rating</th>
+	</tr>
+	</thead>
+	<tbody>
+	{% for plugin in top_rated %}
+		{% include "plugins/top_partial.html" %}
+			<td>{{ plugin.rating.get_real_rating|floatformat }} ({{ plugin.rating_votes }} votes)</td>
+		</tr>
+	{% endfor %}
+	</tbody>
+</table>
+
+<h3>Most downloaded</h3>
+<table class="list">
+	<thead>
+	<tr>
+		<th>Title</th>
+		<th>Category</th>
+		<th>Platform(s)</th>
+		<th>Language</th>
+		<th>Latest version</th>
+		<th>Downloads</th>
+	</tr>
+	</thead>
+	<tbody>
+	{% for plugin in most_downloaded %}
+		{% include "plugins/top_partial.html" %}
+			<td>{{ plugin.downloads }}</td>
+		</tr>
+	{% endfor %}
+	</tbody>
+</table>
+
+{% load comments %}
+<h3>Most commented</h3>
+<table class="list">
+	<thead>
+	<tr>
+		<th>Title</th>
+		<th>Category</th>
+		<th>Platform(s)</th>
+		<th>Language</th>
+		<th>Latest version</th>
+		<th>Comments</th>
+	</tr>
+	</thead>
+	<tbody>
+	{% for plugin in most_commented %}
+	{% get_comment_count for plugin as comment_count %}
+		{% include "plugins/top_partial.html" %}
+			<td>{{ comment_count }}</td>
+		</tr>
+	{% endfor %}
+	</tbody>
+</table>
+{% endcache %}
+
+{% endblock %}

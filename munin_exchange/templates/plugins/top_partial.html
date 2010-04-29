@@ -1,0 +1,10 @@
+<tr>
+	<td style="width: 120px;"><a href="{% url plugins_details title_slug=plugin.title_slug %}" title="{{ plugin.description|truncatewords:20|striptags }}" class="title">{{ plugin.title }}</a></td>
+	<td><a href="{% url plugins_index %}?filter=category:{{ plugin.get_category }}">{{ plugin.get_category }}</a></td>
+	<td>
+		{% for platform in plugin.get_platforms %}
+			<a href="{% url plugins_index %}?filter=platform:{{ platform }}">{{ platform }}</a>{% if not forloop.last %},{% endif %}
+		{% endfor %}
+	</td>
+	<td><a href="{% url plugins_index %}?filter=language:{{ plugin.language }}">{{ plugin.language }}</a></td>
+	<td><a href="{% url plugins_versions title_slug=plugin.title_slug %}">{{ plugin.get_latest_version.version_number }}</a></td>

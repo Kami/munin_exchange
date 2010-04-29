@@ -1,0 +1,52 @@
+{% load cache %}
+<div class="footnav">
+	<a class="first" href="{% url index %}">Home</a>
+	<a href="{% url plugins_index %}">Plugins</a>
+	<a href="{% url plugins_top %}">Top 10</a>
+	<a href="{% url plugins_statistics %}">Statistics</a>
+	<a href="{%url plugins_submit_plugin %}">Submit</a>
+	<a href="/docs/api/">API (1.0)</a>
+	<a href="/about/">About</a>
+	<a href="/contact/">Contact</a>
+</div>
+<div class="footnav">
+	{% cache 500 footer_stats %}
+	<div class="linksleft">
+		<h3>Recent submissions</h3>
+		<ul>
+			{% for plugin in latest_plugins %}
+				<li><a href="{% url plugins_details title_slug=plugin.title_slug %}" class="tooltip" title="{{ plugin.description|truncatewords:20|striptags }} <br /><br />Category: <strong>{{ plugin.get_category }}</strong>, language: <strong>{{ plugin.language }}</strong>)">{{ plugin.title }}</a></li>
+			{% endfor %}
+		</ul>
+	</div>
+	<div class="linksleft">
+		<h3>Most downloaded</h3>
+		<ul>
+			{% for plugin in most_downloaded_plugins %}
+				<li><a href="{% url plugins_details title_slug=plugin.title_slug %} "class="tooltip" title="{{ plugin.description|truncatewords:20|striptags }} <br /><br />Downloads: <strong>{{ plugin.downloads }}</strong>">{{ plugin.title }}</a></li>
+			{% endfor %}
+		</ul>
+	</div>
+	<div class="linksleft">
+		<h3>Top rated</h3>
+		<ul>
+			{% for plugin in top_rated_plugins %}
+				<li><a href="{% url plugins_details title_slug=plugin.title_slug %}" "class="tooltip" title="{{ plugin.description|truncatewords:20|striptags }} <br /><br />Rating: <strong>{{ plugin.rating.get_rating }}</strong> (votes: <strong>{{ plugin.rating.votes }}</strong>)">{{ plugin.title }}</a></li>
+			{% endfor %}
+		</ul>
+	</div>
+	{% endcache %}
+	{% cache 180 footer_comments %}
+	<div class="linksleft">
+		<h3>Recent comments</h3>
+		<ul>
+			{% for comment in latest_comments %}
+				<li><a href="{% url plugins_details title_slug=comment.content_object.title_slug %}#c{{ comment.id }}" class="tooltip" title="<strong>{{ comment.user_name }}</strong>: {{ comment.comment|truncatewords:60 }} (<strong>{{ comment.submit_date|date:"d.m.Y" }}</strong>)"><strong>{{ comment.user_name }}</strong>: {{ comment.comment|truncatewords:10 }} (<strong>{{ comment.content_object.title }}</strong>)</a></li>
+			{% endfor %}
+		</ul>
+	</div>
+	{% endcache %}
+
+	<div class="clearer">&nbsp;</div>
+</div>
+<p class="copyrights">Copyrights &copy; 2010 <a href="">Munin Exchange</a> | Template by <a href="http://demusdesign.com">DemusDesign</a></p>

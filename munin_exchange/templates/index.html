@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Munin plugin repository{% endblock %}
+{% block content %}
+<h2>Welcome to <span>Munin Exchange</span></h2>
+	<div class="sidebar">
+		<ul id="links">
+			<li><a href="{% url plugins_feed %}" id="rss">Subscribe for updates</a></li>
+			<li><a href="http://www.twitter.com/MuninExchange" id="twitter">Follow us on Twitter</a></li>
+			<li><a href="http://sourceforge.net/mailarchive/forum.php?forum_name=munin-users" id="mailing_list">munin-users mailing list</a></li>
+		</ul>
+	</div>
+	
+	<div class="main_content">
+		<p>Welcome to Munin Exchange, a plugin repository for Munin inspired by http://www.nagiosexchange.org/</p> 
+
+		<p><strong>In order to participate on the new website (submit plugins and post comments) you don't need to create a new user account and you can use your existing OpenID account.</strong></p>
+
+		<h3>Quick start guide</h3> 
+		<ul class="content"> 
+		<li>If you want to upload plugins, create a user account by clicking "<a href="{% url auth_register %}">Register</a>". The whole process is very simple, because you don't actually need to register and you only need a valid OpenID account.</li> 
+		<li>For browsing and/or downloading, enter the search term in the input box in the left or go directly to the "Plugins" link.</li> 
+		<li>If you want to upload a new version of an existing plugin, locate the plugin and click on the "Submit a new version" link on the plugin description page.</li> 
+		<li>You also need to be registered to post comments</li>
+		</ul> 
+	</div>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Edit a plugin{% endblock %}
+
+{% load assets %}
+{% block stylesheets %}
+	{% assets "css_markitup" %}
+		<link rel="stylesheet" type="text/css" media="screen" href="{{ ASSET_URL }}" />
+	{% endassets %}
+{% endblock %}
+
+{% block javascript %}
+	{% assets "js_markitup" %}
+		<script src="{{ ASSET_URL }}" type="text/javascript" charset="utf-8"></script>
+	{% endassets %}
+{% endblock %}
+
+{% load breadcrumbs %}
+{% block breadcrumbs %}
+{% breadcrumb_url 'Plugins' plugins_index %}
+{% breadcrumb_url plugin.title plugins_details plugin.title_slug %}
+{% breadcrumb 'Edit' %}
+{% endblock %}
+
+{% block content %}
+<h2>Edit a plugin "{{ plugin.title }}"</h2>
+{% include "common/messages.html" %}
+{% include "common/form_errors.html" %}
+
+{% include "plugins/submit_partial.html" %}
+<form enctype="multipart/form-data" action="" method="post">{% csrf_token %}
+    {% include "forms/fields.html" %}
+    <div class="actions">
+        <button type="submit" name="submit" value="Edit">Edit &raquo;</button>
+    </div>
+</form>
+{% endblock %}

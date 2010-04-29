@@ -1,0 +1,8 @@
+*.sqlite
+*.pyc
+munin_exchange/assets/admin_media
+munin_exchange/assets/*/*/gen/*
+munin_exchange/assets/site_media/plugins/
+munin_exchange/assets/site_media/images/plugins/
+munin_exchange/data/*.zip
+munin_exchange/configs/common/local_settings.py

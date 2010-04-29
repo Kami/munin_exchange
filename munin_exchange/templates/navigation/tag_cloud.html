@@ -1,0 +1,14 @@
+<script type="text/javascript">
+$(window).load(function()
+{
+	$('a[rel=tag]').tipTip(
+	{
+		delay: 100
+	});
+});
+</script>
+<div class="tagcloud">
+	{% for tag in tag_cloud %}
+		<span class="size{{ tag.1 }}"><a rel="tag" href=" {% url plugins_index %}?filter=tag:{{ tag.0 }}" title="{{ tag.2 }} plugins tagged with '{{ tag.0 }}'">{{ tag.0 }}</a></span>
+	{% endfor %}
+</div>

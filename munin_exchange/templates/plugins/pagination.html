@@ -1,0 +1,15 @@
+<div class="pagination">
+    <span class="step-links">
+        {% if plugins.has_previous %}
+            <a href="{{ plugins.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ plugins.number }} of {{ plugins.paginator.num_pages }}.
+        </span>
+
+        {% if plugins.has_next %}
+            <a href="#{{ plugins.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+</div>
